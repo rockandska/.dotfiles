@@ -1,0 +1,66 @@
+##############################################
+# DEFAULT
+##############################################
+[DEFAULT]
+lib=
+	DEFAULT_DOTFILES_REPO="https://github.com/rockandska/.dotfiles.git"
+	DEFAULT_DOTFILES_RAW="https://raw.githubusercontent.com/rockandska/.dotfiles"
+	DEFAULT_DOTFILES_BRANCH="master"
+
+##############################################
+# MYREPOS
+##############################################
+
+[.local/usr/src/myrepos]
+order = 1
+lib =
+	BRANCH=refs/tags/1.20171231
+	build() {
+		cd $MR_REPO 2>&1
+		make install PREFIX=~/.local
+	}
+checkout = 
+	git clone git://myrepos.branchable.com/.git ${MR_REPO:?=}
+	cd ${MR_REPO:?}
+	git checkout ${BRANCH:?}
+post_checkout =
+	build
+update = :
+
+##############################################
+# CPANM
+##############################################
+
+[.local/usr/src/cpanm]
+order = 2
+lib =
+	BRANCH=App-cpanminus-1.7907
+	# Load remote perl locallib file if not exist
+	if [ ! -e ~/.config/bash/bash.d/perl_locallib.sh -a ! -h ~/.config/bash/bash.d/perl_locallib.sh ];then
+		mkdir -p ~/.config/bash/bash.d
+		wget -nv -O - ${DEFAULT_DOTFILES_RAW:?}/${DEFAULT_DOTFILES_BRANCH:?}/.config/bash/bash.d/perl_locallib.sh > ~/.config/bash/bash.d/perl_locallib.sh
+	else
+		. ~/.config/bash/bash.d/perl_locallib.sh
+	fi
+	build() {
+		cat $MR_REPO/App-cpanminus/cpanm | perl - App::cpanminus
+	}
+checkout =
+	git clone https://github.com/miyagawa/cpanminus ${MR_REPO:?}
+	cd ${MR_REPO:?}
+	git checkout ${BRANCH:?}
+post_checkout =
+	build
+update = :
+
+##############################################
+# DEFAULT DOTFILES
+##############################################
+
+[.local/.dotfiles/default]
+order = 3
+checkout =
+	git clone ${DEFAULT_DOTFILES_REPO} ${MR_REPO:?}
+	cd ${MR_REPO:?}
+	git checkout ${DEFAULT_DOTFILES_BRANCH:?}
+update = :
