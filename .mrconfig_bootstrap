@@ -8,6 +8,7 @@ lib=
 	DEFAULT_DOTFILES_BRANCH="master"
 
 ##############################################
+# #1
 # MYREPOS
 ##############################################
 
@@ -17,18 +18,19 @@ lib =
 	BRANCH=refs/tags/1.20171231
 	build() {
 		cd $MR_REPO 2>&1
+		git checkout ${BRANCH:?}
 		make install PREFIX=~/.local
 	}
-checkout = 
-	git clone git://myrepos.branchable.com/.git ${MR_REPO:?=}
-	cd ${MR_REPO:?}
-	git checkout ${BRANCH:?}
+checkout =
+	git clone git://myrepos.branchable.com/.git ${MR_REPO:?=} || rm -rf ${MR_REPO:?}
 post_checkout =
-	build
+	build || rm -rf ${MR_REPO:?}
 update = :
 
 ##############################################
+# #2
 # CPANM
+# + STOW
 ##############################################
 
 [.local/usr/src/cpanm]
@@ -43,17 +45,20 @@ lib =
 		. ~/.config/bash/bash.d/perl_locallib.sh
 	fi
 	build() {
-		cat $MR_REPO/App-cpanminus/cpanm | perl - App::cpanminus
+		cd ${MR_REPO:?}
+		git checkout ${BRANCH:?}
+		cat App-cpanminus/cpanm | perl - App::cpanminus
+		cpanm IO::Scalar
+		cpanm Stow
 	}
 checkout =
-	git clone https://github.com/miyagawa/cpanminus ${MR_REPO:?}
-	cd ${MR_REPO:?}
-	git checkout ${BRANCH:?}
+	git clone https://github.com/miyagawa/cpanminus ${MR_REPO:?} || rm -rf ${MR_REPO:?}
 post_checkout =
-	build
+	build || rm -rf ${MR_REPO:?}
 update = :
 
 ##############################################
+# #3
 # DEFAULT DOTFILES
 ##############################################
 
