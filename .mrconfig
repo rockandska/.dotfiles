@@ -1,3 +1,123 @@
+##############################################
+# DEFAULT
+##############################################
 [DEFAULT]
 
-include = cat ./.mrconfig_bootstrap 2> /dev/null
+# Include defaults libs.
+include = cat ~/.local/share/mr/* 2>/dev/null || true
+
+# Include personal libs
+include = cat ~/.config/myrepos/lib/* 2>/dev/null || true
+
+# Include repositories config
+include = cat ~/.config/myrepos/conf.d/* 2>/dev/null || true
+
+lib=
+	DOTFILES_REPO=https://github.com/rockandska/.dotfiles
+	DOTFILES_BRANCH=master
+	STOW_BACKUP_DIR="${HOME:?}/.config/stow/backup/$(date +%m-%d-%Y-%Hh%Mm%Ss)"
+	missing() {
+		what=${1:=missing name}
+		type ${what} 1> /dev/null && return 1 || {
+			echo "missing: ${what}" 1>&2
+			return 0
+		}
+	}
+	is_stowable() {
+		[ -z "$MR_DISABLE_STOW" ] &&
+		( cd "$MR_REPO" && mr -c ~/.mrconfig stowable >/dev/null 2>&1 )
+	}
+	mr_misstowed () {
+		stowable_then_continue || return 0
+		set_stow_common_opts
+		ensure_package_exists
+		re="^  \* existing target (is neither a link nor a directory|is not owned by stow): "
+		misstowed_files=$(command "$STOW" -n $stow_common_opts ${STOW_NAME} 3>&1 1>&2 2>&3 \
+					| egrep -v "^(mr misstowed.*)?$" \
+					| egrep "$re" \
+					| sed -r -e "s#$re#$STOW_TARGET/#" \
+					| sort \
+					| uniq)
+		if [ "$1" = "--backup-and-stow" ] && [ -n "${misstowed_files:-}" ];then
+			mkdir -p ${STOW_BACKUP_DIR:?}
+		fi
+		for file in ${misstowed_files:-};do
+			dest=$(printf '%s' "$file" | sed -e "s@$STOW_TARGET@$MR_REPO@")
+			if [ "$1" = "--backup-and-stow" ];then
+				echo "Backing up ${file:?} into ${STOW_BACKUP_DIR:?}${file:?} before stow !"
+				cp -L --parents ${file:?} ${STOW_BACKUP_DIR:?}
+				echo "Deleting ${file:?}"
+				rm ${file:?}
+			# this 'elif' is executed if the file IS different from the repository version
+			elif [ "$1" = "--delete-unmodified" -o "$1" = "--delete-all" ]; then
+				echo "Deleting ${file}"
+				rm "$file"
+			elif ! diff -q "$dest" "$file" >/dev/null 2>&1;then
+				echo "${file} and ${dest} are different"
+				if [ "$1" = "--delete-all" ]; then
+					echo "Deleting ${file}"
+					rm "$file"
+				fi
+			else
+				echo "$file"
+			fi
+		done
+		if [ "$1" = "--backup-and-stow" ];then
+			command "$STOW" $stow_common_opts ${STOW_NAME}
+		fi
+	}
+
+misstowed = mr_misstowed "$@"
+
+##############################################
+# #1
+# MYREPOS
+##############################################
+
+[.local/src/myrepos]
+order = 1
+lib =
+	BRANCH=1.20171231
+	build() {
+		cd $MR_REPO 2>&1
+		make install PREFIX=~/.local
+	}
+checkout =
+	git clone -b ${BRANCH:?} git://myrepos.branchable.com/.git ${MR_REPO:?} || rm -rf ${MR_REPO:?}
+update = "echo p"
+fixups =
+	build
+skip = ! missing mr
+
+##############################################
+# #2
+# CPANM
+# + STOW
+##############################################
+
+[.local/src/cpanm]
+order = 2
+lib =
+	BRANCH=App-cpanminus-1.7907
+	build() {
+		cd ${MR_REPO:?}
+		cat App-cpanminus/cpanm | perl - App::cpanminus
+		cpanm IO::Scalar
+		cpanm Stow
+	}
+checkout =
+	git clone -b ${BRANCH:?} https://github.com/miyagawa/cpanminus ${MR_REPO:?} || rm -rf ${MR_REPO:?}
+fixups =
+	build
+skip = ! missing cpanm
+
+##############################################
+# #3
+# DEFAULT DOTFILES
+##############################################
+
+[.local/dotfiles/default]
+order = 3
+stowable = true
+checkout =
+	git clone -b ${DOTFILES_BRANCH:?} ${DOTFILES_REPO:?} ${MR_REPO:?} || rm -rf ${MR_REPO:?}

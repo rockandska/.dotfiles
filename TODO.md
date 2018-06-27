@@ -1,0 +1,1 @@
+- removing ~/.mrcongig only after the validation of the user
