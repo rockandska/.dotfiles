@@ -63,6 +63,7 @@ lib=
 			fi
 		done
 		if [ "$1" = "--backup-and-stow" ];then
+			echo "Stowing......."
 			command "$STOW" $stow_common_opts ${STOW_NAME}
 		fi
 	}
