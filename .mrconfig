@@ -84,10 +84,11 @@ lib =
 	}
 checkout =
 	git clone -b ${BRANCH:?} git://myrepos.branchable.com/.git ${MR_REPO:?} || rm -rf ${MR_REPO:?}
-update = "echo p"
 fixups =
 	build
-skip = ! missing mr
+skip =
+	[ ${MR_ACTION} != "status" ] \
+        && ! missing mr
 
 ##############################################
 # #2
@@ -109,7 +110,9 @@ checkout =
 	git clone -b ${BRANCH:?} https://github.com/miyagawa/cpanminus ${MR_REPO:?} || rm -rf ${MR_REPO:?}
 fixups =
 	build
-skip = ! missing cpanm
+skip =
+        [ ${MR_ACTION} != "status" ] \
+        && ! missing cpanm
 
 ##############################################
 # #3
