@@ -32,9 +32,8 @@ if [[ ! -d "${TMP_MYREPOS_DIR:?}" ]]; then
 	exit 1
 fi
 function cleanup {      
-	rm -rf "${TMP_MYREPOS_DIR:?}"
 	echo "Deleting temp working directory ${TMP_MYREPOS_DIR:?}"
-}
+	rm -rf "${TMP_MYREPOS_DIR:?}"
 trap cleanup EXIT ERR
 
 cd ${HOME:?\$HOME not defined}

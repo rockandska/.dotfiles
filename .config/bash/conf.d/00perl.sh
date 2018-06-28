@@ -10,3 +10,5 @@ read -r -d '' PERL_CONFIG <<- EOF || true
 EOF
 
 eval "${PERL_CONFIG}"
+
+PERL_CPANM_HOME="~/.cache/cpanm"
