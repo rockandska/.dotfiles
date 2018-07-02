@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -eo pipefail
-
-# Which version of perl is installed ?
-PERL_MAJOR_VERSION=$(	perl -e 'print $];' \
-			| sed 's/\..*//' 2> /dev/null ) \
-				|| { >&2 echo "Error while getting Perl version"; exit 1; }
+function cleanup {      
+	echo "Deleting temp working ${TMP_MYREPOS_DIR:?}"
+	rm -rf "${TMP_MYREPOS_DIR:?}"
+}
+trap cleanup EXIT ERR
 
 # Init  with default values or args
 BOOTSTRAP_MRCONFIG_URL="${1:-https://raw.githubusercontent.com/rockandska/.dotfiles/master/.mrconfig}"
@@ -12,6 +12,8 @@ BOOTSTRAP_PERL_LIBPATH_URL="${2:-https://raw.githubusercontent.com/rockandska/.d
 
 MYREPOS_REPO='git://myrepos.branchable.com/'
 MYREPOS_BRANCH='master'
+
+cd ${HOME:?\$HOME not defined}
 
 if [ -e ~/.mrconfig ] || [ -h ~/.mrconfig ];then
 	>&2 echo "#########################################################################################"
@@ -22,43 +24,37 @@ if [ -e ~/.mrconfig ] || [ -h ~/.mrconfig ];then
 	exit 1
 fi
 
-
 ######
 # Prepare tmp directory for myrepos
 ######
-TMP_MYREPOS_DIR=$(mktemp -d --suffix=_myrepos)
+TMP_MYREPOS_DIR=$(mktemp -d --suffix=_dotfiles_bootstrap)
 if [[ ! -d "${TMP_MYREPOS_DIR:?}" ]]; then
 	echo "Could not create temp dir"
 	exit 1
 fi
-function cleanup {      
-	echo "Deleting temp working directory ${TMP_MYREPOS_DIR:?}"
-	rm -rf "${TMP_MYREPOS_DIR:?}"
-trap cleanup EXIT ERR
-
-cd ${HOME:?\$HOME not defined}
 
 ######
 # Init Perl config
 ######
-wget -q -O - ${BOOTSTRAP_PERL_LIBPATH_URL} | bash
+wget -q -O ${TMP_MYREPOS_DIR:?}/perl_config.sh ${BOOTSTRAP_PERL_LIBPATH_URL}
+source ${TMP_MYREPOS_DIR:?}/perl_config.sh
 
 ######
 # MYREPOS TMP INSTALL
 ######
 echo "Cloning MyRepos from ${MYREPOS_REPO}"
-git clone -q -b ${MYREPOS_BRANCH} ${MYREPOS_REPO} ${TMP_MYREPOS_DIR}
+git clone -q -b ${MYREPOS_BRANCH} ${MYREPOS_REPO} ${TMP_MYREPOS_DIR}/myrepos
 
 ######
 # BOOTSTRAP FROM URL
 ######
 echo "Bootstraping from ${BOOTSTRAP_MRCONFIG_URL:?} (could take some minutes...)"
-wget -q -O - ${BOOTSTRAP_MRCONFIG_URL:?} | ${TMP_MYREPOS_DIR}/mr --quiet --force --trust-all -d ~/ bootstrap - ~/
+wget -q -O - ${BOOTSTRAP_MRCONFIG_URL:?} | ${TMP_MYREPOS_DIR}/myrepos/mr --quiet --force --trust-all -d ~/ bootstrap - ~/
 
 #####
 # BACKUP FILES ALREADY PRESENT AND STOW NEW ONES
 #####
-mr -m misstowed --backup-and-stow
+${TMP_MYREPOS_DIR}/myrepos/mr -m misstowed --backup-and-stow
 
 #####
 # RESTART BASH
@@ -71,11 +67,16 @@ exec bash
 #####
 mr -m checkout
 
+#####
+# RESTART BASH
+#####
 
+exec bash
 
 #####
 # EXIT
 #####
+
 echo -e "###############################################################"
 echo -e "#                                                             #"
 echo -e "# Please restart bash to take into account the new parameters #"
