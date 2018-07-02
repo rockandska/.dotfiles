@@ -1,0 +1,5 @@
+[.local/opt/oh-my-git]
+lib = 
+	BRANCH=WIP_new_refactoring
+checkout =
+	git clone -b ${BRANCH} https://github.com/rockandska/oh-my-git.git ${MR_REPO:?} || rm -rf ${MR_REPO:?}

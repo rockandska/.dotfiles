@@ -7,8 +7,10 @@ function cleanup {
 trap cleanup EXIT ERR
 
 # Init  with default values or args
-BOOTSTRAP_MRCONFIG_URL="${1:-https://raw.githubusercontent.com/rockandska/.dotfiles/master/.mrconfig}"
-BOOTSTRAP_PERL_LIBPATH_URL="${2:-https://raw.githubusercontent.com/rockandska/.dotfiles/master/.config/bash/conf.d/00perl.sh}"
+BOOTSTRAP_MRCONFIG_URL="${1:-https://raw.githubusercontent.com/rockandska/.dotfiles/master/.mrconfig}"; export BOOTSTRAP_MRCONFIG_URL
+BOOTSTRAP_PERL_LIBPATH_URL="${2:-https://raw.githubusercontent.com/rockandska/.dotfiles/master/.config/bash/conf.d/00perl.sh}"; export BOOTSTRAP_PERL_LIBPATH_URL
+DOTFILES_REPO="${3:-https://github.com/rockandska/.dotfiles}"; export DOTFILES_REPO
+DOTFILES_REPO_BRANCH="${4:-master}"; export DOTFILES_REPO_BRANCH
 
 MYREPOS_REPO='git://myrepos.branchable.com/'
 MYREPOS_BRANCH='master'
@@ -49,7 +51,7 @@ git clone -q -b ${MYREPOS_BRANCH} ${MYREPOS_REPO} ${TMP_MYREPOS_DIR}/myrepos
 # BOOTSTRAP FROM URL
 ######
 echo "Bootstraping from ${BOOTSTRAP_MRCONFIG_URL:?} (could take some minutes...)"
-wget -q -O - ${BOOTSTRAP_MRCONFIG_URL:?} | ${TMP_MYREPOS_DIR}/myrepos/mr --quiet --force --trust-all -d ~/ bootstrap - ~/
+wget -q -O - ${BOOTSTRAP_MRCONFIG_URL:?} | ${TMP_MYREPOS_DIR}/myrepos/mr -m --force --trust-all -d ~/ bootstrap - ~/
 
 #####
 # BACKUP FILES ALREADY PRESENT AND STOW NEW ONES
@@ -57,26 +59,20 @@ wget -q -O - ${BOOTSTRAP_MRCONFIG_URL:?} | ${TMP_MYREPOS_DIR}/myrepos/mr --quiet
 ${TMP_MYREPOS_DIR}/myrepos/mr -m misstowed --backup-and-stow
 
 #####
-# RESTART BASH
+# RELOAD BASH
 #####
-
 exec bash
 
 #####
-# CHECKOUT AGAIN NOW WE HAVE OUR DEFAULT CONFIG FILES
+# CHECKOUT AGAIN NOW WE HAVE 
+# OUR DEFAULT CONFIG FILES
+# AND ENV INIT
 #####
 mr -m checkout
 
 #####
-# RESTART BASH
-#####
-
-exec bash
-
-#####
 # EXIT
 #####
-
 echo -e "###############################################################"
 echo -e "#                                                             #"
 echo -e "# Please restart bash to take into account the new parameters #"

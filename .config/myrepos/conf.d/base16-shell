@@ -1,0 +1,6 @@
+[.local/opt/base16-shell]
+lib = 
+	COMMIT=efa06ce
+checkout =
+	git clone https://github.com/chriskempson/base16-shell.git ${MR_REPO:?} || rm -rf ${MR_REPO:?}
+	cd ${MR_REPO:?} && git checkout efa06ce

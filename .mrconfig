@@ -9,12 +9,9 @@ include = cat ~/.local/share/mr/* 2>/dev/null || true
 # Include personal libs
 include = cat ~/.config/myrepos/lib/* 2>/dev/null || true
 
-# Include repositories config
-include = cat ~/.config/myrepos/conf.d/* 2>/dev/null || true
-
 lib=
-	DOTFILES_REPO=https://github.com/rockandska/.dotfiles
-	DOTFILES_BRANCH=master
+	: ${DOTFILES_REPO:=https://github.com/rockandska/.dotfiles}
+	: ${DOTFILES_REPO_BRANCH:=master}
 	STOW_BACKUP_DIR="${HOME:?}/.config/stow/backup/$(date +%m-%d-%Y-%Hh%Mm%Ss)"
 	missing() {
 		what=${1:=missing name}
@@ -67,6 +64,9 @@ lib=
 			command "$STOW" $stow_common_opts ${STOW_NAME}
 		fi
 	}
+
+# Include repositories config
+include = cat ~/.config/myrepos/conf.d/* 2>/dev/null || true
 
 misstowed = mr_misstowed "$@"
 
@@ -124,4 +124,4 @@ skip =
 order = 3
 stowable = true
 checkout =
-	git clone -b ${DOTFILES_BRANCH:?} ${DOTFILES_REPO:?} ${MR_REPO:?} || rm -rf ${MR_REPO:?}
+	git clone -b ${DOTFILES_REPO_BRANCH:?} ${DOTFILES_REPO:?} ${MR_REPO:?} || rm -rf ${MR_REPO:?}

@@ -1,0 +1,5 @@
+[.local/opt/pureline]
+lib = 
+	BRANCH=develop
+checkout =
+	git clone -b ${BRANCH} https://github.com/rockandska/pureline.git ${MR_REPO:?} || rm -rf ${MR_REPO:?}
