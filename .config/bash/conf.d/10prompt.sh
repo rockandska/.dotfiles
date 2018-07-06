@@ -1,3 +1,14 @@
+_set_term_title() {
+	# If this is an xterm set the title to user@host:dir
+	case "$TERM" in
+	xterm*|rxvt*)
+	    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+	    ;;
+	*)
+	    ;;
+	esac
+}
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
@@ -27,6 +38,8 @@ else
 fi
 unset color_prompt force_color_prompt
 
+_set_term_title
+
 # OhMyGit
 [[ -f ${HOME}/.local/opt/oh-my-git/prompt.sh ]] && \
 	source ${HOME}/.local/opt/oh-my-git/prompt.sh
@@ -34,14 +47,3 @@ unset color_prompt force_color_prompt
 # PureLine
 [[ -f ${HOME}/.local/opt/pureline/pureline ]] && [[ -f ${HOME}/.config/pureline/config.conf ]] && \
 	source ${HOME}/.local/opt/pureline/pureline ${HOME}/.config/pureline/config.conf
-
-_set_term_title() {
-	# If this is an xterm set the title to user@host:dir
-	case "$TERM" in
-	xterm*|rxvt*)
-	    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-	    ;;
-	*)
-	    ;;
-	esac
-}
