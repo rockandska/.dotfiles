@@ -68,6 +68,7 @@ lib=
 # Include repositories config
 include = cat ~/.config/myrepos/conf.d/* 2>/dev/null || true
 
+# Alias commands
 misstowed = mr_misstowed "$@"
 
 ##############################################
@@ -75,7 +76,7 @@ misstowed = mr_misstowed "$@"
 # MYREPOS
 ##############################################
 
-[.local/src/myrepos]
+[${HOME}/.local/src/myrepos]
 order = 1
 lib =
 	BRANCH=1.20171231
@@ -97,7 +98,7 @@ skip =
 # + STOW
 ##############################################
 
-[.local/src/cpanm]
+[${HOME}/.local/src/cpanm]
 order = 2
 lib =
 	BRANCH=App-cpanminus-1.7907
@@ -120,7 +121,7 @@ skip =
 # DEFAULT DOTFILES
 ##############################################
 
-[.local/dotfiles/default]
+[${HOME}/.local/src/dotfiles]
 order = 3
 stowable = true
 checkout =

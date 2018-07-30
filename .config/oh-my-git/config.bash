@@ -5,12 +5,12 @@ OMG_STATUS_BAR=true
 OMG_NOPS1=false
 
 OMG_THEME["left_side_color"]="Black"
-OMG_THEME["left_side_bg"]="White"
+OMG_THEME["left_side_bg"]="LightWhite"
 OMG_THEME["left_icon_color"]="Red"
 OMG_THEME["stash_color"]="Yellow"
-OMG_THEME["right_side_color"]="White"
+OMG_THEME["right_side_color"]="LightWhite"
 OMG_THEME["right_side_bg"]="Blue"
-OMG_THEME["right_icon_color"]="White"
+OMG_THEME["right_icon_color"]="LightWhite"
 OMG_THEME["last_separator_color"]=${OMG_THEME["right_side_bg"]}                                                                                                                                              
 OMG_THEME["last_separator_bg"]="Default"
 OMG_THEME["venv_color"]="Red"

@@ -15,7 +15,7 @@ DOTFILES_REPO_BRANCH="${4:-master}"; export DOTFILES_REPO_BRANCH
 MYREPOS_REPO='git://myrepos.branchable.com/'
 MYREPOS_BRANCH='master'
 
-cd ${HOME:?\$HOME not defined}
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 if [ -e ~/.mrconfig ] || [ -h ~/.mrconfig ];then
 	>&2 echo "#########################################################################################"
@@ -29,15 +29,18 @@ fi
 ######
 # Prepare tmp directory for myrepos
 ######
+echo "Prepare tmp directory for myrepos"
 TMP_MYREPOS_DIR=$(mktemp -d --suffix=_dotfiles_bootstrap)
 if [[ ! -d "${TMP_MYREPOS_DIR:?}" ]]; then
 	echo "Could not create temp dir"
 	exit 1
 fi
+cd ${TMP_MYREPOS_DIR:?}
 
 ######
 # Init Perl config
 ######
+echo "Init Perl config"
 wget -q -O ${TMP_MYREPOS_DIR:?}/perl_config.sh ${BOOTSTRAP_PERL_LIBPATH_URL}
 source ${TMP_MYREPOS_DIR:?}/perl_config.sh
 
@@ -51,24 +54,22 @@ git clone -q -b ${MYREPOS_BRANCH} ${MYREPOS_REPO} ${TMP_MYREPOS_DIR}/myrepos
 # BOOTSTRAP FROM URL
 ######
 echo "Bootstraping from ${BOOTSTRAP_MRCONFIG_URL:?} (could take some minutes...)"
-wget -q -O - ${BOOTSTRAP_MRCONFIG_URL:?} | ${TMP_MYREPOS_DIR}/myrepos/mr -m --force --trust-all -d ~/ bootstrap - ~/
+wget -q -O - ${BOOTSTRAP_MRCONFIG_URL:?} | ${TMP_MYREPOS_DIR}/myrepos/mr -q --force --trust-all -d ~/ bootstrap - ~/
 
 #####
 # BACKUP FILES ALREADY PRESENT AND STOW NEW ONES
 #####
+cd ${HOME:?}
+echo "Backup files already present and stow new ones"
 ${TMP_MYREPOS_DIR}/myrepos/mr -m misstowed --backup-and-stow
-
-#####
-# RELOAD BASH
-#####
-exec bash
 
 #####
 # CHECKOUT AGAIN NOW WE HAVE 
 # OUR DEFAULT CONFIG FILES
 # AND ENV INIT
 #####
-mr -m checkout
+echo "Checkout again with mr"
+mr -q checkout
 
 #####
 # EXIT
