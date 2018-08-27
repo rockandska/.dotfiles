@@ -1,0 +1,11 @@
+[${HOME}/.local/src/dotfiles-private]
+order = 4
+stowable = true
+lib = 
+	GIT_REF=master
+checkout =
+	ssh-keygen -R gitlab.com
+	ssh-keyscan -H gitlab.com >> ~/.ssh/known_hosts
+	get ${MR_REPO} git@gitlab.com:rockandska/dotfiles-private.git
+	cd ${MR_REPO}
+	git checkout ${GIT_REF}

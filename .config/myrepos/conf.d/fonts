@@ -1,0 +1,12 @@
+[${HOME}/.local/opt/dummy-repos/fonts]
+stowable = true
+checkout =
+	mkdir -p ${MR_REPO}
+	mkdir -p ${HOME}/.local/share/fonts
+	get \
+		${HOME}/.local/share/fonts/AnonymiceNerdFontComplete.ttf \
+		https://github.com/ryanoasis/nerd-fonts/raw/35b49461574bbfa3eaa19beb239f6baafee1d68b/patched-fonts/AnonymousPro/complete/Anonymice%20Nerd%20Font%20Complete.ttf
+	get \
+		${HOME}/.local/share/fonts/ter-powerline-v12n.psf.gz \
+		https://github.com/ryanoasis/nerd-fonts/raw/6edb95723defa4ab8a8e2cd3eac2535cb114a2c2/src/unpatched-fonts/Terminus/PSF/ter-powerline-v12n.psf.gz
+	fc-cache -r ${HOME}/.local/share/fonts

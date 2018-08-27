@@ -1,0 +1,31 @@
+[include]
+path = ~/.config/git/config-private
+
+[include]
+path = ~/.config/git/config-work
+
+[diff]
+	submodule = log
+[fetch]
+	recurseSubmodules = on-demand
+[status]
+	submoduleSummary = true
+[push]
+	default = simple
+[credential]
+	helper = store useHttpPath
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[merge]
+	conflictstyle = diff3
+	tool = vimdiff
+[mergetool]
+	prompt = false
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[user]
+	email = yoann_mac_donald@hotmail.com
+	name = rockandska

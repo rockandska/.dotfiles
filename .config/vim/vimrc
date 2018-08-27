@@ -1,0 +1,59 @@
+set nocompatible
+
+if empty($XDG_CACHE_HOME)
+  let $XDG_CACHE_HOME = $HOME.'/.cache'
+endif
+
+if empty($XDG_CONFIG_HOME)
+  let $XDG_CONFIG_HOME = $HOME.'/.config'
+endif
+
+if !isdirectory($XDG_CACHE_HOME  . "/vim/swap")
+  call mkdir($XDG_CACHE_HOME . "/vim/swap", "p")
+endif
+
+if !isdirectory($XDG_CACHE_HOME  . "/vim/backup")
+  call mkdir($XDG_CACHE_HOME . "/vim/backup", "p")
+endif
+
+if !isdirectory($XDG_CACHE_HOME  . "/vim/undo")
+  call mkdir($XDG_CACHE_HOME . "/vim/undo", "p")
+endif
+
+if !isdirectory($XDG_CONFIG_HOME  . "/vim")
+  call mkdir($XDG_CONFIG_HOME . "/vim", "p")
+endif
+
+" Environment
+set directory=$XDG_CACHE_HOME/vim/swap//
+set backupdir=$XDG_CACHE_HOME/vim/backup//
+set undodir=$XDG_CACHE_HOME/vim/undo//
+set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
+let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
+
+let VIMDIR="$XDG_CONFIG_HOME/vim"
+
+" Use before config if available {
+    if filereadable(expand(VIMDIR . "/vimrc-before.vim"))
+        exec 'source ' . expand(VIMDIR . "/vimrc-before.vim")
+    endif
+" }
+
+" Load Vim-plug config and install missting plugins {
+    if filereadable(expand(VIMDIR . "/vim-plug.vim"))
+        exec 'source ' . expand(VIMDIR . "/vim-plug.vim")
+    endif
+" }
+
+" Load config files {
+    for fpath in split(globpath(VIMDIR . "/config", '*.vim'), '\n')
+        exe 'source' fpath
+    endfor
+" }
+
+" Use after config if available {
+    if filereadable(expand(VIMDIR . "/vimrc-after.vim"))
+	exec 'source ' . expand(VIMDIR . "/vimrc-after.vim")
+    endif
+" }

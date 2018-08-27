@@ -1,0 +1,33 @@
+[${HOME}/.local/src/terminator]
+lib = 
+	TERMINATOR_VERSION=1.91
+	INITTOOL_VERSION=0.51.0
+checkout =
+	mkdir -p ${MR_REPO}
+	get - https://launchpad.net/terminator/gtk3/1.91/+download/terminator-${TERMINATOR_VERSION}.tar.gz | tar -xz -C ${MR_REPO}
+fixups =
+	cd ${MR_REPO}/terminator-${TERMINATOR_VERSION}
+	if ! command -v intltool-merge > /dev/null 2>&1;then
+		cpanm XML::Parser
+		mkdir -p ${HOME}/.local/src/intltool
+		get - https://launchpad.net/intltool/trunk/${INITTOOL_VERSION}/+download/intltool-${INITTOOL_VERSION}.tar.gz | tar -xz -C ${HOME}/.local/src/intltool
+		cd ${HOME}/.local/src/intltool/intltool-${INITTOOL_VERSION}
+		./configure --prefix=~/.local &&
+		make
+		make install &&
+		install -v -m644 -D doc/I18N-HOWTO ~/.local/share/doc/intltool-${INITTOOL_VERSION}/I18N-HOWTO
+	fi
+	./setup.py install --prefix=~/.local --record=install-files.txt
+	mkdir -p ${HOME}/.local/share/xfce4/helpers/
+	(cat > ${HOME}/.local/share/xfce4/helpers/custom-TerminalEmulator.desktop) <<EOF
+		[Desktop Entry]
+		NoDisplay=true
+		Version=1.0
+		Encoding=UTF-8
+		Type=X-XFCE-Helper
+		X-XFCE-Category=TerminalEmulator
+		X-XFCE-CommandsWithParameter=${HOME}/.local/bin/terminator "%s"
+		Icon=terminator
+		Name=terminator
+		X-XFCE-Commands=${HOME}/.local/bin/terminator
+	EOF
