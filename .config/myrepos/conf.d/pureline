@@ -1,6 +1,6 @@
 [${HOME}/.local/opt/pureline]
 lib = 
-	GIT_REF=318458905453de42b6c57df0a49c7871ee150afe
+	GIT_REF=da1377fb6872b480cc40dfbaa6ad2e9741259266
 checkout =
-	git clone https://github.com/chris-marsh/pureline.git ${MR_REPO} || rm -rf ${MR_REPO}
+	git clone https://github.com/rockandska/pureline.git ${MR_REPO} || rm -rf ${MR_REPO}
 	cd ${MR_REPO} && git checkout ${GIT_REF}

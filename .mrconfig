@@ -26,7 +26,7 @@ lib=
 	}
 	is_stowable() {
 		[ -z "$MR_DISABLE_STOW" ] &&
-		( cd "$MR_REPO" && mr -c ~/.mrconfig stowable >/dev/null 2>&1 )
+		( cd "$MR_REPO" && mr -t stowable >/dev/null 2>&1 )
 	}
 	get() {
 		local destination=${1:?}

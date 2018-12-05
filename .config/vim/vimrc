@@ -40,7 +40,7 @@ let VIMDIR="$XDG_CONFIG_HOME/vim"
     endif
 " }
 
-" Load Vim-plug config and install missting plugins {
+" Load Vim-plug config and install missing plugins {
     if filereadable(expand(VIMDIR . "/vim-plug.vim"))
         exec 'source ' . expand(VIMDIR . "/vim-plug.vim")
     endif
