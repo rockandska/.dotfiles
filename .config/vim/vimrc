@@ -1,5 +1,3 @@
-set nocompatible
-
 if empty($XDG_CACHE_HOME)
   let $XDG_CACHE_HOME = $HOME.'/.cache'
 endif
@@ -34,7 +32,7 @@ let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
 
 let VIMDIR="$XDG_CONFIG_HOME/vim"
 
-" Use before config if available {
+" Use before if available {
     if filereadable(expand(VIMDIR . "/vimrc-before.vim"))
         exec 'source ' . expand(VIMDIR . "/vimrc-before.vim")
     endif
@@ -46,11 +44,11 @@ let VIMDIR="$XDG_CONFIG_HOME/vim"
     endif
 " }
 
-" Load config files {
-    for fpath in split(globpath(VIMDIR . "/config", '*.vim'), '\n')
-        exe 'source' fpath
-    endfor
-" }
+"" Load config files {
+"    for fpath in split(globpath(VIMDIR . "/config", '*.vim'), '\n')
+"        exe 'source' fpath
+"    endfor
+"" }
 
 " Use after config if available {
     if filereadable(expand(VIMDIR . "/vimrc-after.vim"))

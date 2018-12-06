@@ -1,0 +1,5 @@
+"""""""
+" DevIcons
+"""""""
+
+let g:WebDevIconsNerdTreeBeforeGlyphPadding=''

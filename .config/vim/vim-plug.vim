@@ -38,9 +38,6 @@ Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Indent guides
 Plug 'nathanaelkane/vim-indent-guides'
 
-" File/Buffer manager
-Plug 'vifm/vifm.vim', { 'commit': '07377162f9c4da0040d3fc89c0d323ac93565d82'}
-
 " Icons
 Plug 'ryanoasis/vim-devicons'
 
