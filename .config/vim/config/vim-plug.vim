@@ -2,6 +2,19 @@
 call plug#begin("$XDG_CONFIG_HOME/vim/plugged")
 
 """"""""""""""""
+""" Navigation
+""""""""""""""""
+
+" Change root directory
+Plug 'airblade/vim-rooter'
+
+" File explorer
+Plug 'scrooloose/nerdtree'
+
+" Buffer management
+Plug 'moll/vim-bbye'
+
+""""""""""""""""
 """ LANGUAGES 
 """"""""""""""""
 
@@ -40,20 +53,16 @@ Plug 'vim-airline/vim-airline'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 
 " Indent guides
-Plug 'nathanaelkane/vim-indent-guides'
+Plug 'rockandska/vim-indent-guides', { 'branch': 'buffer_local_variables' }
 
 " Icons
 Plug 'ryanoasis/vim-devicons'
 
 """"""""""""""""
-""" Navigation
+""" Others
 """"""""""""""""
 
-" File explorer
-Plug 'scrooloose/nerdtree'
-
-" Buffer management
-Plug 'moll/vim-bbye'
+Plug 'chrisbra/sudoedit.vim'
 
 " Initialize plugin system
 call plug#end()

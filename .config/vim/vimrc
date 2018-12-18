@@ -32,26 +32,8 @@ let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
 
 let VIMDIR="$XDG_CONFIG_HOME/vim"
 
-" Use before if available {
-    if filereadable(expand(VIMDIR . "/vimrc-before.vim"))
-        exec 'source ' . expand(VIMDIR . "/vimrc-before.vim")
-    endif
-" }
-
-" Load Vim-plug config and install missing plugins {
-    if filereadable(expand(VIMDIR . "/vim-plug.vim"))
-        exec 'source ' . expand(VIMDIR . "/vim-plug.vim")
-    endif
-" }
-
-"" Load config files {
-"    for fpath in split(globpath(VIMDIR . "/config", '*.vim'), '\n')
-"        exe 'source' fpath
-"    endfor
-"" }
-
-" Use after config if available {
-    if filereadable(expand(VIMDIR . "/vimrc-after.vim"))
-	exec 'source ' . expand(VIMDIR . "/vimrc-after.vim")
-    endif
+" Load config files {
+    for fpath in split(globpath(VIMDIR . "/config", '**/*.vim'), '\n')
+        exe 'source' fpath
+    endfor
 " }

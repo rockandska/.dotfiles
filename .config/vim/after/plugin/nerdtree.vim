@@ -25,26 +25,29 @@ function! NerdLeftClose(node)
   endif
 endfunction
 
-call NERDTreeAddKeyMap({
-  \ 'key': '<Left>',
-  \ 'scope': 'Node',
-  \ 'callback': 'NerdLeftClose',
-  \ 'quickhelpText': 'Close current directory' })
+try
+  call NERDTreeAddKeyMap({
+    \ 'key': '<Left>',
+    \ 'scope': 'Node',
+    \ 'callback': 'NerdLeftClose',
+    \ 'quickhelpText': 'Close current directory' })
 
-call NERDTreeAddKeyMap({
-  \ 'key': 'h',
-  \ 'scope': 'Node',
-  \ 'callback': 'NerdLeftClose',
-  \ 'quickhelpText': 'Close current directory' })
+  call NERDTreeAddKeyMap({
+    \ 'key': 'h',
+    \ 'scope': 'Node',
+    \ 'callback': 'NerdLeftClose',
+    \ 'quickhelpText': 'Close current directory' })
 
-call NERDTreeAddKeyMap({
-  \ 'key': '<Right>',
-  \ 'scope': 'Node',
-  \ 'callback': 'NerdRightOpen',
-  \ 'quickhelpText': 'Open current directory' })
+  call NERDTreeAddKeyMap({
+    \ 'key': '<Right>',
+    \ 'scope': 'Node',
+    \ 'callback': 'NerdRightOpen',
+    \ 'quickhelpText': 'Open current directory' })
 
-call NERDTreeAddKeyMap({
-  \ 'key': 'l',
-  \ 'scope': 'Node',
-  \ 'callback': 'NerdRightOpen',
-  \ 'quickhelpText': 'Open current directory' })
+  call NERDTreeAddKeyMap({
+    \ 'key': 'l',
+    \ 'scope': 'Node',
+    \ 'callback': 'NerdRightOpen',
+    \ 'quickhelpText': 'Open current directory' })
+catch
+endtry
