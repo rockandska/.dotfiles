@@ -11,26 +11,19 @@ Plug 'airblade/vim-rooter'
 " File explorer
 Plug 'scrooloose/nerdtree'
 
-" Buffer management
-Plug 'moll/vim-bbye'
+" Search files / buffers
+Plug 'junegunn/fzf', { 'dir': '~/.local/opt/fzf', 'do': './install --all --xdg --no-update-rc' }
+Plug 'junegunn/fzf.vim'
 
 """"""""""""""""
-""" LANGUAGES 
+""" LANGUAGES
 """"""""""""""""
 
-" Perl
-Plug 'vim-perl/vim-perl'
-" Python
-Plug 'vim-scripts/indentpython.vim'
-" Ruby
-Plug 'vim-ruby/vim-ruby'
-" Yaml Syntax
-Plug 'stephpy/vim-yaml', { 'as': 'stephpy/vim-yaml' }
-" Yaml Indent
-Plug 'avakhov/vim-yaml', { 'as': 'avakhov/vim-yaml' }
+" Multi language indent / syntex
+Plug 'sheerun/vim-polyglot'
 
 " Multi language matcher
-Plug 'adelarsq/vim-matchit'
+Plug 'andymass/vim-matchup'
 
 """"""""""""""""
 """ SOFTWARE RELATED
@@ -44,7 +37,6 @@ Plug 'tpope/vim-fugitive'
 
 " Colors
 Plug 'tomasr/molokai'
-Plug 'altercation/vim-colors-solarized'
 
 " Additional informations
 Plug 'vim-airline/vim-airline'
