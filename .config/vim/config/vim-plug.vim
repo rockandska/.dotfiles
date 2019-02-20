@@ -12,7 +12,7 @@ Plug 'airblade/vim-rooter'
 Plug 'scrooloose/nerdtree'
 
 " Search files / buffers
-Plug 'junegunn/fzf', { 'dir': '~/.local/opt/fzf', 'do': './install --all --xdg --no-update-rc' }
+Plug 'junegunn/fzf', { 'dir': '~/.local/opt/fzf', 'do': './install --no-completion --xdg --no-update-rc' }
 Plug 'junegunn/fzf.vim'
 
 """"""""""""""""
@@ -35,6 +35,9 @@ Plug 'tpope/vim-fugitive'
 """ Apparence
 """"""""""""""""
 
+" Icons
+Plug 'ryanoasis/vim-devicons'
+
 " Colors
 Plug 'tomasr/molokai'
 
@@ -47,14 +50,13 @@ Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Indent guides
 Plug 'rockandska/vim-indent-guides', { 'branch': 'buffer_local_variables' }
 
-" Icons
-Plug 'ryanoasis/vim-devicons'
-
 """"""""""""""""
 """ Others
 """"""""""""""""
 
 Plug 'chrisbra/sudoedit.vim'
+
+Plug 'kana/vim-submode'
 
 " Initialize plugin system
 call plug#end()

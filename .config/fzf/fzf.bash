@@ -1,14 +1,15 @@
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == */home/rockandska/.local/opt/fzf/bin* ]]; then
+if [[ ! "$PATH" == *${HOME}/.local/opt/fzf/bin* ]]; then
   export PATH="$PATH:/home/rockandska/.local/opt/fzf/bin"
 fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "/home/rockandska/.local/opt/fzf/shell/completion.bash" 2> /dev/null
+[[ $- == *i* ]] && source "${HOME}/.local/opt/fzf-obc/fzf-obc.bash" 2> /dev/null
 
 # Key bindings
 # ------------
-source "/home/rockandska/.local/opt/fzf/shell/key-bindings.bash"
+source "${HOME}/.local/opt/fzf/shell/key-bindings.bash"
 
+export FZF_DEFAULT_COMMAND="find . -type f -not -path '*/\.git/*'"
