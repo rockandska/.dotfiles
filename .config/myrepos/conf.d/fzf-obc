@@ -1,6 +1,6 @@
 [${HOME}/.local/opt/fzf-obc]
 lib =
-  GIT_REF=d53d58c
+  GIT_REF=1.1.0
 checkout =
   git clone https://github.com/rockandska/fzf-obc.git ${MR_REPO} || rm -rf ${MR_REPO}
   cd ${MR_REPO} && git checkout ${GIT_REF}

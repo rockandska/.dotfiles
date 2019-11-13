@@ -6,7 +6,7 @@ fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "${HOME}/.local/opt/fzf-obc/fzf-obc.bash" 2> /dev/null
+[[ $- == *i* ]] && source "${HOME}/.local/opt/fzf-obc/bin/fzf-obc.bash" 2> /dev/null
 
 # Key bindings
 # ------------
