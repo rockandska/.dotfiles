@@ -11,10 +11,8 @@ set expandtab
 
 filetype plugin indent on
 
-" Display whitespace errors as `.'
+set showbreak=↪\
 exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~,extends:>,precedes:<"
-"set showbreak=↪\
-"set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 
 set nowrap    " Do not wrap lines
 set linebreak " Wrap lines when convenient
