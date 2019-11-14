@@ -11,8 +11,8 @@ function! GetGitIgnoreFiles ()
       if line =~ '/$' | let igstring .= "," . line . "*" | con | endif
       let igstring .= "," . line
     endfor
-"    let execstring = "set wildignore+=".substitute(igstring, '^,', '', "g")
-"    execute execstring
+    let execstring = "set wildignore+=".substitute(igstring, '^,', '', "g")
+    execute execstring
     return substitute(igstring, '^,', '', "g")
   endif
 endfunction
