@@ -1,3 +1,7 @@
+##########
+# IGNORE #
+#
+##########
 ### Global Directories ###
 Desktop/
 Documents/
@@ -115,3 +119,14 @@ tags
 
 .config/vim/plugged/*
 !.config/vim/plugged/.gitkeep
+
+#########
+# Allow #
+# #######
+
+# Track .local/opt/dotfiles-bootstrap
+!.local
+.local/*
+!.local/opt
+.local/opt/*
+!.local/opt/dotfiles-bootstrap
