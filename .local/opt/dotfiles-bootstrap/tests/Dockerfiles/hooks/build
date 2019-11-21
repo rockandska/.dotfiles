@@ -1,0 +1,23 @@
+#!/bin/bash
+set -eou pipefail
+: ${GUIX_BINARY_VERSION:=1.0.1}
+: ${DOCKER_CONTAINER_NAME:=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')}
+
+: ${DOCKERFILE_PATH:=Dockerfile}
+: ${IMAGE_NAME:=guix:${GUIX_BINARY_VERSION}}
+
+trap "docker rm -f ${DOCKER_CONTAINER_NAME}" ERR EXIT INT
+
+docker rm -f ${DOCKER_CONTAINER_NAME} || true
+
+docker build --build-arg GUIX_BINARY_VERSION=${GUIX_BINARY_VERSION} -f ${DOCKERFILE_PATH} -t ${IMAGE_NAME} .
+
+# Build latest guix version too
+
+docker run -d --name ${DOCKER_CONTAINER_NAME} --privileged $IMAGE_NAME
+docker exec -i ${DOCKER_CONTAINER_NAME} sh <<"EOF"
+  set -eou pipefail
+  guix pull
+  guix gc --delete-generations --optimize
+EOF
+docker commit ${DOCKER_CONTAINER_NAME} guix:latest

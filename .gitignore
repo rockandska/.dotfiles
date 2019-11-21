@@ -3,6 +3,7 @@
 #
 ##########
 ### Global Directories ###
+bash_completion.d/
 Desktop/
 Documents/
 Downloads/
@@ -80,6 +81,7 @@ snap/
 .config/vnote/
 .config/xfce4/
 .config/xubuntu/
+.gradle/
 .guix-profile
 .ssh/
 
