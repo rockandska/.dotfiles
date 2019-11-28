@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+set -euo pipefail
+
+if [ "${GUIX_ENV_LOADED:=0}" -eq 0 ];then
+	source /etc/profile.d/guix.sh
+fi
+
+exec "$@"

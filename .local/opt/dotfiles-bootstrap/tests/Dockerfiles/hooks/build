@@ -6,18 +6,21 @@ set -eou pipefail
 : ${DOCKERFILE_PATH:=Dockerfile}
 : ${IMAGE_NAME:=guix:${GUIX_BINARY_VERSION}}
 
-trap "docker rm -f ${DOCKER_CONTAINER_NAME}" ERR EXIT INT
-
-docker rm -f ${DOCKER_CONTAINER_NAME} || true
+docker rm -f ${DOCKER_CONTAINER_NAME} 2>/dev/null || true
 
 docker build --build-arg GUIX_BINARY_VERSION=${GUIX_BINARY_VERSION} -f ${DOCKERFILE_PATH} -t ${IMAGE_NAME} .
 
-# Build latest guix version too
-
+# Create a container with stable release and pull last version
 docker run -d --name ${DOCKER_CONTAINER_NAME} --privileged $IMAGE_NAME
-docker exec -i ${DOCKER_CONTAINER_NAME} sh <<"EOF"
-  set -eou pipefail
-  guix pull
-  guix gc --delete-generations --optimize
-EOF
+docker exec -ti ${DOCKER_CONTAINER_NAME} guix pull
+# Restart to have the last version of daemon running
+docker restart ${DOCKER_CONTAINER_NAME}
+# Delete old generations and clean
+docker exec -ti ${DOCKER_CONTAINER_NAME} guix pull --delete-generations
+docker exec -ti ${DOCKER_CONTAINER_NAME} guix gc --delete-generations
+docker exec -ti ${DOCKER_CONTAINER_NAME} guix gc --optimize
+docker exec -ti ${DOCKER_CONTAINER_NAME} guix gc
+# Tag new version
 docker commit ${DOCKER_CONTAINER_NAME} guix:latest
+# Clean
+docker rm -f ${DOCKER_CONTAINER_NAME}
